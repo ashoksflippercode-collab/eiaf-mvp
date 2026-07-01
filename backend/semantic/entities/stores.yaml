@@ -1,7 +1,19 @@
 # Semantic entity definition (PRD §3 Layer 4). Zero SQL, zero physical names.
 entity: stores
-metrics: []   # pure lookup entity — no aggregation, only dimension selects
+
+metrics:
+  - total_stores
+
 filters:
+
+  period: []
+
   store_id: []
+
+  company_id: []
+
   store_city: []
-  is_active: []
+
+  store_state: []
+
+  store_active: []
