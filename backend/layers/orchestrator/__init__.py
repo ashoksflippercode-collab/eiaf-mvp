@@ -113,6 +113,125 @@ class OrchestrationLayer(Layer):
         elif data.intent == "facility_log_by_store":
             select_dims = ["facility_date_completed", "facility_service_provider", "facility_notes"]
             filters = self._store_id_filter(extracted, "facility_store_id") + filters
+            
+        ##########################################################
+        # STORE MODULE
+        ##########################################################
+
+        elif data.intent == "list_stores":
+            select_dims = [
+                "store_id",
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+
+        elif data.intent == "count_stores":
+            select_metrics = ["total_stores"]
+
+        elif data.intent == "store_details":
+            select_dims = [
+                "store_id",
+                "store_name",
+                "store_address",
+                "store_city",
+                "store_state",
+                "zip_code",
+                "store_phone",
+                "store_email",
+                "manager_name",
+                "manager_email",
+                "store_url",
+            ]
+            filters = self._store_id_filter(extracted, "store_id")
+
+        elif data.intent == "store_phone":
+            select_dims = ["store_phone"]
+            filters = self._store_id_filter(extracted, "store_id")
+
+        elif data.intent == "store_email":
+            select_dims = ["store_email"]
+            filters = self._store_id_filter(extracted, "store_id")
+
+        elif data.intent == "store_manager":
+            select_dims = [
+                "manager_name",
+                "manager_email",
+            ]
+            filters = self._store_id_filter(extracted, "store_id")
+
+        elif data.intent == "store_address":
+            select_dims = [
+                "store_address",
+                "store_city",
+                "store_state",
+                "zip_code",
+            ]
+            filters = self._store_id_filter(extracted, "store_id")
+
+        elif data.intent == "stores_by_state":
+            select_dims = [
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+            filters = self._simple_filter(
+                extracted,
+                "state",
+                "store_state",
+            )
+
+        elif data.intent == "stores_by_city":
+            select_dims = [
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+            filters = self._simple_filter(
+                extracted,
+                "city",
+                "store_city",
+            )
+
+        elif data.intent == "active_stores":
+            select_dims = [
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+            filters.append(
+                {
+                    "field": "store_active",
+                    "operator": "EQUALS",
+                    "value": "1",
+                }
+            )
+
+        elif data.intent == "inactive_stores":
+            select_dims = [
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+            filters.append(
+                {
+                    "field": "store_active",
+                    "operator": "EQUALS",
+                    "value": "0",
+                }
+            )
+
+        elif data.intent == "stores_by_company":
+            select_dims = [
+                "store_name",
+                "store_city",
+                "store_state",
+            ]
+            filters = self._simple_filter(
+                extracted,
+                "company_id",
+                "company_id",
+            )
 
         return {
             "entity": entity,
@@ -131,6 +250,23 @@ class OrchestrationLayer(Layer):
         if store_id is None:
             return []
         return [{"field": field, "operator": "EQUALS", "value": store_id}]
+
+    @staticmethod
+    def _simple_filter(
+        extracted: dict[str, Any],
+        extracted_key: str,
+        field: str,
+    ) -> list[dict[str, Any]]:
+        value = extracted.get(extracted_key)
+
+        if value is None:
+            return []
+
+        return [{
+            "field": field,
+            "operator": "EQUALS",
+            "value": value
+        }]
 
     def _assert_registered(self, entity: str, metric: str) -> None:
         """Fail fast unless `entity` is registered and declares `metric` (§3.4)."""
