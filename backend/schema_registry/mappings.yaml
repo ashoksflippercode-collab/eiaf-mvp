@@ -147,6 +147,26 @@ dimensions:
     table: stores
     column: manager_email
     type: string
+  store_state:
+    table: stores
+    column: state
+    type: string
+
+  zip_code:
+    table: stores
+    column: zip_code
+    type: string
+
+  company_id:
+    table: stores
+    column: company_id
+    type: numeric
+
+  store_url:
+    table: stores
+    column: store_url
+    type: string
+
   is_active:
     table: stores
     column: is_active

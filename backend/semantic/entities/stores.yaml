@@ -2,10 +2,9 @@
 entity: stores
 
 metrics:
-  - total_stores
+  - store_count
 
 filters:
-
   period: []
 
   store_id: []
@@ -16,4 +15,4 @@ filters:
 
   store_state: []
 
-  store_active: []
+  is_active: []
