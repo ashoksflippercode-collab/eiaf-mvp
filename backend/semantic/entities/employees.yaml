@@ -1,0 +1,9 @@
+entity: employees
+metrics:
+  - employee_count
+filters:
+  roster_store_id: []
+  employee_status: []
+  is_trainer: []
+  first_name: []
+  last_name: []

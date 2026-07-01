@@ -1,0 +1,85 @@
+# Versioned intent-pattern table (PRD §3 Layer 2) — maintenance domain.
+#
+# Rule-based ONLY for MVP — NO LLM. Matching contract: text must match an
+# intents[*].patterns entry, and (where relevant) a periods[*].patterns entry.
+# Any miss -> INTENT_NOT_FOUND. The layer never guesses.
+version: 2
+
+intents:
+  - name: get_store_info
+    description: "Store details (address/phone/email) for a given store number."
+    patterns:
+      - '\bstore\s+info(?:rmation)?\s+(?:for\s+)?(?:store\s+)?#?(\d+)\b'
+      - '\binfo(?:rmation)?\s+(?:for|about)\s+store\s+#?(\d+)\b'
+      - '\bdetails?\s+for\s+store\s+#?(\d+)\b'
+      - '\bphone\s+number\s+for\s+store\s+#?(\d+)\b'
+
+  - name: get_store_manager
+    description: "Who manages a given store."
+    patterns:
+      - '\bwho\s+(?:is\s+the\s+)?manager(?:s)?\s+(?:of|for|at)\s+store\s+#?(\d+)\b'
+      - '\bmanager\s+(?:of|for|at)\s+store\s+#?(\d+)\b'
+      - '\bwho\s+manages\s+store\s+#?(\d+)\b'
+
+  - name: list_employees_by_store
+    description: "List active employees working at a given store."
+    patterns:
+      - '\bemployees?\s+(?:at|for|in)\s+store\s+#?(\d+)\b'
+      - '\bwho\s+works\s+at\s+store\s+#?(\d+)\b'
+      - '\bstaff\s+(?:at|for|in)\s+store\s+#?(\d+)\b'
+      - '\broster\s+for\s+store\s+#?(\d+)\b'
+
+  - name: failed_calibrations
+    description: "Torque calibrations that failed (optionally for a store/period)."
+    patterns:
+      - '\bfail(?:ed)?\s+(?:torque\s+)?calibrations?\b'
+      - '\btorque\s+(?:check|calibration)s?\s+fail\b'
+      - '\bany\s+stores?\s+fail\b.*\btorque\b'
+
+  - name: torque_not_submitted
+    description: "Stores that have not submitted their torque check."
+    patterns:
+      - '\b(?:not|didn.?t|did\s+not)\s+submit(?:ted)?\s+(?:their\s+)?torque\b'
+      - '\btorque\s+check\s+(?:not|missing)\s+submit'
+
+  - name: equipment_issues_reported
+    description: "Equipment issues reported in a maintenance check submission."
+    patterns:
+      - '\bequipment\s+issues?\s+report(?:ed)?\b'
+      - '\bissues?\s+report(?:ed)?\s+(?:this|today|on)\b'
+      - '\bwhat\s+issues?\s+(?:were|are)\s+report(?:ed)?\b'
+
+  - name: most_reported_equipment
+    description: "Which equipment gets the most reported issues."
+    patterns:
+      - '\bwhat\s+equipment\b.*\bmost\s+(?:reported\s+)?issues?\b'
+      - '\bmost\s+(?:reported\s+)?(?:equipment\s+)?issues?\b'
+      - '\bequipment\b.*\bmost\s+issues?\b'
+
+  - name: facility_log_by_store
+    description: "Facility maintenance log history for a given store."
+    patterns:
+      - '\bfacility\s+(?:maintenance\s+)?log\s+for\s+store\s+#?(\d+)\b'
+      - '\bmaintenance\s+history\s+for\s+store\s+#?(\d+)\b'
+      - '\bservice\s+history\s+for\s+store\s+#?(\d+)\b'
+
+# Recognized MVP period values: today, this_week, this_month.
+periods:
+  - value: today
+    patterns:
+      - '\btoday\b'
+      - '\bso far today\b'
+  - value: this_week
+    patterns:
+      - '\bthis week\b'
+      - '\bthe week\b'
+      - '\bpast week\b'
+      - '\blast 7 days\b'
+      - '\bweekly\b'
+  - value: this_month
+    patterns:
+      - '\bthis month\b'
+      - '\bthe month\b'
+      - '\bpast month\b'
+      - '\blast 30 days\b'
+      - '\bmonthly\b'

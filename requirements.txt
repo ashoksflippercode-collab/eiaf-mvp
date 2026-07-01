@@ -1,0 +1,13 @@
+# EIAF — runtime dependencies (pinned to major versions for reproducibility)
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.29,<1.0
+pydantic>=2.6,<3.0
+PyYAML>=6.0,<7.0
+SQLAlchemy>=2.0,<3.0
+PyMySQL>=1.1,<2.0        # MySQL driver (production). SQLite (stdlib) is the zero-setup default.
+Babel>=2.14,<3.0         # locale-correct currency/number formatting (Indian numbering for ₹)
+
+# --- dev / test / authoring ---
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0         # FastAPI TestClient transport
+ruamel.yaml>=0.18,<0.19  # comment-preserving YAML edits for the add-question wizard

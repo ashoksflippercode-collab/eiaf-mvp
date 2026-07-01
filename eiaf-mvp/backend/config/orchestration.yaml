@@ -1,0 +1,151 @@
+# Orchestration lookup table (PRD §3 Layer 3) — maintenance domain.
+#
+# Deterministic intent -> {entity, metric} map (NO dynamic reasoning for MVP).
+version: 2
+
+intents:
+
+  ####################################################
+  ## STORE MODULE
+  ####################################################
+
+  list_stores:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_id
+        - store_name
+        - store_city
+        - store_state
+
+  count_stores:
+    entity: stores
+    select:
+      metrics:
+        - total_stores
+      dimensions: []
+
+  store_details:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_id
+        - store_name
+        - store_address
+        - store_city
+        - store_state
+        - zip_code
+        - store_phone
+        - store_email
+        - manager_name
+        - manager_email
+        - store_url
+
+      filters:
+        - store_id
+
+  store_phone:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_phone
+
+      filters:
+        - store_id
+
+  store_email:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_email
+
+      filters:
+        - store_id
+
+  store_manager:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - manager_name
+        - manager_email
+
+      filters:
+        - store_id
+
+  store_address:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_address
+        - store_city
+        - store_state
+        - zip_code
+
+      filters:
+        - store_id
+
+  active_stores:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_name
+        - store_city
+        - store_state
+
+      filters:
+        - active
+
+  inactive_stores:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_name
+        - store_city
+        - store_state
+
+      filters:
+        - inactive
+
+  stores_by_city:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_name
+        - store_city
+        - store_state
+
+      filters:
+        - city
+
+  stores_by_state:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_name
+        - store_city
+        - store_state
+
+      filters:
+        - state
+
+  stores_by_company:
+    entity: stores
+    select:
+      metrics: []
+      dimensions:
+        - store_name
+        - store_city
+        - store_state
+
+      filters:
+        - company_id

@@ -1,0 +1,9 @@
+entity: facility_maintenance
+metrics:
+  - facility_log_count
+filters:
+  period:
+    - today
+    - this_week
+    - this_month
+  facility_store_id: []

@@ -1,0 +1,28 @@
+# Response Layer configuration (PRD §3 Layer 7) — maintenance domain.
+# Template-based ONLY for MVP — NO LLM.
+version: 3
+
+period_labels:
+  today: {possessive: "today's", plain: "today"}
+  this_week: {possessive: "week's", plain: "this week"}
+  this_month: {possessive: "month's", plain: "this month"}
+
+metrics:
+  failed_calibration_count:
+    template: "There were {value} failed torque calibration(s) {period}."
+    format: number
+  calibration_submission_count:
+    template: "{value} torque calibration submission(s) were recorded {period}."
+    format: number
+  issue_count:
+    template: "{value} equipment issue(s) were reported {period}."
+    format: number
+  facility_log_count:
+    template: "{value} facility maintenance log(s) were recorded {period}."
+    format: number
+  employee_count:
+    template: "There are {value} employee(s) matching that filter."
+    format: number
+  store_count:
+    template: "There are {value} store(s) matching that filter."
+    format: number

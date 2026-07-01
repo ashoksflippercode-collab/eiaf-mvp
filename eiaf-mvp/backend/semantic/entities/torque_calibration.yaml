@@ -1,0 +1,13 @@
+entity: torque_calibration
+metrics:
+  - failed_calibration_count
+  - calibration_submission_count
+  - stores_not_submitted_torque
+filters:
+  period:
+    - today
+    - this_week
+    - this_month
+  calibration_store_id: []
+  wrench_result: []
+  calibration_tech: []

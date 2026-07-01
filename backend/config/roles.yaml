@@ -1,0 +1,17 @@
+# RBAC configuration (PRD §3 Layer 5).
+version: 1
+
+roles:
+  admin:
+    allowed_entities:
+      - stores
+      - employees
+      - torque_calibration
+      - equipment_issues
+      - facility_maintenance
+
+# Example of a future, more restricted role added WITHOUT touching code:
+#   store_manager:
+#     allowed_entities:
+#       - stores
+#       - equipment_issues

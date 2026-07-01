@@ -1,0 +1,11 @@
+entity: equipment_issues
+metrics:
+  - issue_count
+filters:
+  period:
+    - today
+    - this_week
+    - this_month
+  equipment_store_id: []
+  check_status: []
+  equipment_name: []

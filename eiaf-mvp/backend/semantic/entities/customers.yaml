@@ -1,0 +1,32 @@
+# Semantic entity definition (PRD §3 Layer 4).
+#
+# Demonstrates the §6.2 extensibility path: a brand-new business entity added
+# with ZERO code change — only this file, a schema_registry mapping, an
+# orchestration entry, an intent pattern, and an RBAC grant.
+#
+# This layer knows ONLY business concepts — entities, metrics, and allowed
+# filters. It contains ZERO SQL and ZERO physical column names.
+#
+# MVP data-model note: the demo `customers` table has no separate signup column,
+# so "new customers in a period" is counted by activity date (purchase_date in
+# the schema registry). When a dedicated signup date is added, only the schema
+# registry mapping changes — this file and the layer code stay untouched.
+entity: customers
+
+metrics:
+  - new_customer_count
+  - total_sales
+  - avg_purchase
+  - orders
+
+# Allowed filter values per dimension. The Semantic Layer rejects anything not
+# declared here with SEMANTIC_VALIDATION_FAILED before it can reach the DB.
+filters:
+  period:
+    - today
+    - this_week
+    - this_month
+  customer_name: []
+  product: []
+  purchase_amount: []
+  purchase_date: []

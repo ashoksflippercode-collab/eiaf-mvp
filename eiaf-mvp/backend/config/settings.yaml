@@ -1,0 +1,47 @@
+# EIAF runtime settings.
+# Resolutions of the §7 "Open Questions" live here so they are config, not code.
+
+# --- Database (PRD §3 Layer 6) -------------------------------------------------
+# SQLAlchemy URL. The Data Layer enforces SELECT-only regardless of the driver,
+# but production should ALSO use a read-only DB credential (defense in depth).
+#
+#   Production (MySQL, read-only user):
+#     mysql+pymysql://eiaf_ro:password@db-host:3306/eiaf
+#   Local / zero-setup default (SQLite file, created by `python -m backend.seed`):
+database:
+  url: "mysql+pymysql://root:admin@192.168.0.199:3306/rnrsvgsu_summitauto"
+  connect_timeout_seconds: 5
+
+# --- Period boundary semantics (§7 Q1) ----------------------------------------
+# Resolved as ROLLING windows, matching the PRD's example SQL
+# (`purchase_date >= CURRENT_DATE - INTERVAL 7 DAY`).
+# `days` is how many days back from "today" (inclusive) the window reaches.
+#   today      -> purchase_date >= start of today
+#   this_week  -> purchase_date >= today - 7 days
+#   this_month -> purchase_date >= today - 30 days
+periods:
+  today: { days: 0 }
+  this_week: { days: 7 }
+  this_month: { days: 30 }
+
+# --- Rate limiting (§3 Layer 5, §7 Q3) ----------------------------------------
+# Enforced per user_id even though MVP has a single Admin role.
+rate_limit:
+  max_requests: 60
+  window_seconds: 60
+
+# --- Localization (§3 Layer 7, §7 Q6) -----------------------------------------
+# INR is the only MVP currency, but formatting is locale-driven so future markets
+# are a config change, not a code change. `en_IN` yields ₹63,000 / ₹1,00,000.
+locale:
+  code: "en_IN"
+  currency: "INR"
+  # Babel number pattern. `¤` is the currency symbol; `#,##,##0` is Indian digit
+  # grouping with no decimals -> ₹63,000 and ₹1,00,000 (not 63,000.00).
+  currency_format: "¤#,##,##0"
+
+# --- Audit (§3 Layer 5, §6.3) -------------------------------------------------
+# Append-only JSONL. In production point this at a write-once sink (e.g. WORM
+# storage or an append-only log service); the app only ever appends.
+audit:
+  log_path: "backend/audit_log.jsonl"
