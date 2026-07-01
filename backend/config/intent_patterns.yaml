@@ -63,6 +63,82 @@ intents:
       - '\bmaintenance\s+history\s+for\s+store\s+#?(\d+)\b'
       - '\bservice\s+history\s+for\s+store\s+#?(\d+)\b'
 
+  ####################################################
+  # STORE MODULE
+  ####################################################
+
+  - name: list_stores
+    patterns:
+      - "^show (all )?stores$"
+      - "^list (all )?stores$"
+      - "^what stores do we have\\??$"
+      - "^display stores$"
+
+  - name: count_stores
+    patterns:
+      - "^how many stores( are there)?\\??$"
+      - "^store count$"
+      - "^number of stores$"
+
+  - name: store_details
+    entity: store_id
+    patterns:
+      - "^find store (\\d+)$"
+      - "^show details for store (\\d+)$"
+      - "^store (\\d+)$"
+      - "^show store (\\d+)$"
+
+  - name: store_address
+    entity: store_id
+    patterns:
+      - "^where is store (\\d+)\\??$"
+      - "^what is the address of store (\\d+)\\??$"
+
+  - name: store_phone
+    entity: store_id
+    patterns:
+      - "^what'?s the phone number for store (\\d+)\\??$"
+      - "^store (\\d+) phone$"
+
+  - name: store_email
+    entity: store_id
+    patterns:
+      - "^what'?s the email address for store (\\d+)\\??$"
+      - "^store (\\d+) email$"
+
+  - name: store_manager
+    entity: store_id
+    patterns:
+      - "^who is the manager of store (\\d+)\\??$"
+      - "^store (\\d+) manager$"
+
+  - name: stores_by_state
+    entity: state
+    patterns:
+      - "^list all stores in (.+)$"
+      - "^show stores in state (.+)$"
+
+  - name: stores_by_city
+    entity: city
+    patterns:
+      - "^show stores in (.+)$"
+
+  - name: active_stores
+    patterns:
+      - "^which stores are active\\??$"
+      - "^show active stores$"
+
+  - name: inactive_stores
+    patterns:
+      - "^show inactive stores$"
+      - "^which stores are inactive\\??$"
+
+  - name: stores_by_company
+    entity: company_id
+    patterns:
+      - "^how many stores belong to company (\\d+)\\??$"
+      - "^show stores for company (\\d+)$"
+
 # Recognized MVP period values: today, this_week, this_month.
 periods:
   - value: today
