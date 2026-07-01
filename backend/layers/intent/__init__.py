@@ -112,25 +112,57 @@ class IntentLayer(Layer):
         return res
 
     @staticmethod
-    def _match_intent(text: str, intents: list[dict[str, Any]]) -> tuple[str | None, dict[str, Any]]:
-        for intent in intents:
-            for pattern in intent["patterns"]:
-                match = re.search(pattern, text, re.IGNORECASE)
-                if match:
-                    extracted = {}
-                    if match.groups():
-                        val = match.group(1).strip()
-                        # Extract parameter based on pattern
-                        if "top" in pattern:
-                            extracted["limit"] = int(val)
-                        elif "above" in pattern or "greater" in pattern:
-                            extracted["amount"] = float(val.replace(",", "").replace("₹", ""))
-                        elif "store" in pattern:
-                            extracted["store_id"] = int(val)
-                        elif "by" in pattern:
-                            extracted["customer_name"] = val
-                    return intent["name"], extracted
-        return None, {}
+def _match_intent(
+    text: str,
+    intents: list[dict[str, Any]],
+) -> tuple[str | None, dict[str, Any]]:
+
+    for intent in intents:
+
+        entity_name = intent.get("entity")
+
+        for pattern in intent["patterns"]:
+
+            match = re.search(pattern, text, re.IGNORECASE)
+
+            if not match:
+                continue
+
+            extracted: dict[str, Any] = {}
+
+            # Generic entity extraction
+            if entity_name and match.groups():
+
+                value = match.group(1).strip()
+
+                if entity_name in {
+                    "store_id",
+                    "company_id",
+                    "submission_id",
+                    "log_id",
+                    "task_id",
+                    "check_item_id",
+                }:
+                    extracted[entity_name] = int(value)
+
+                elif entity_name in {
+                    "amount",
+                    "hourly_rate",
+                }:
+                    extracted[entity_name] = float(
+                        value.replace(",", "").replace("₹", "")
+                    )
+
+                else:
+                    extracted[entity_name] = value
+
+            # Optional limit support
+            if "limit" in intent and "limit" not in extracted:
+                extracted["limit"] = intent["limit"]
+
+            return intent["name"], extracted
+
+    return None, {}
 
     @staticmethod
     def _match_period(text: str, periods: list[dict[str, Any]]) -> str | None:
